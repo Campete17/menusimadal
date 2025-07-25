@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menú Semanal</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f4f8;
+    }
+
+    header {
+      background-color: #6c63ff;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    section {
+      padding: 20px;
+    }
+
+    .dia-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin: 10px 0;
+      padding: 15px;
+    }
+
+    .dia-label {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+
+    .comida-bloque {
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin: 5px 0 2px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      border: none;
+      border-radius: 5px;
+      padding: 8px 12px;
+      margin-top: 10px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .editar {
+      background-color: #f39c12;
+    }
+
+    .guardar {
+      background-color: #2ecc71;
+    }
+
+    .restaurar {
+      background-color: #3498db;
+      margin-top: 5px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: white;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📅 Menú Semanal</h1>
+  </header>
+
+  
+  <section id="configuracion">
+    <h2>⚙️ Configuración</h2>
+    <p>Selecciona tus alergias o intolerancias:</p>
+    <label><input type="checkbox" class="alergia" value="gluten" /> Gluten</label><br/>
+    <label><input type="checkbox" class="alergia" value="lactosa" /> Lactosa</label><br/>
+    <label><input type="checkbox" class="alergia" value="frutos secos" /> Frutos secos</label><br/>
+    <label><input type="checkbox" class="alergia" value="huevo" /> Huevo</label><br/>
+    <label><input type="checkbox" class="alergia" value="marisco" /> Marisco</label><br/>
+    <hr/>
+  </section>
+
+  
+  <section id="sugerencias">
+    <h2>🤖 Sugerencias según tus ingredientes</h2>
+    <p>Escribe lo que tienes en casa (separado por comas):</p>
+    <input type="text" id="ingredientesDisponibles" placeholder="Ej: arroz, huevo, tomate" />
+    <button onclick="buscarSugerencias()">Buscar platos</button>
+    <ul id="resultadoSugerencias"></ul>
+  </section>
+
+  <section id="entradaMenu">
+    <label><input type="checkbox" id="modoLecturaToggle" /> Activar modo solo lectura</label>
+    
+    <div class="dia-card">
+      <div class="dia-label">Lunes</div>
+      <div class="comida-bloque">
+        <label for="lunes_desayuno">Desayuno</label>
+        <input type="text" id="lunes_desayuno" placeholder="Desayuno" />
+        <input type="text" id="etiqueta_lunes_desayuno" placeholder="Etiquetas desayuno" />
+      </div>
+      <div class="comida-bloque">
+        <label for="lunes_comida">Comida</label>
+        <input type="text" id="lunes_comida" placeholder="Comida" />
+        <input type="text" id="etiqueta_lunes_comida" placeholder="Etiquetas comida" />
+      </div>
+      <div class="comida-bloque">
+        <label for="lunes_cena">Cena</label>
+        <input type="text" id="lunes_cena" placeholder="Cena" />
+        <input type="text" id="etiqueta_lunes_cena" placeholder="Etiquetas cena" />
+      </div>
+      <button class="editar">Editar</button>
+    </div>
+    
+    <div class="dia-card">
+      <div class="dia-label">Martes</div>
+      <div class="comida-bloque">
+        <label for="martes_desayuno">Desayuno</label>
+        <input type="text" id="martes_desayuno" placeholder="Desayuno" />
+        <input type="text" id="etiqueta_martes_desayuno" placeholder="Etiquetas desayuno" />
+      </div>
+      <div class="comida-bloque">
+        <label for="martes_comida">Comida</label>
+        <input type="text" id="martes_comida" placeholder="Comida" />
+        <input type="text" id="etiqueta_martes_comida" placeholder="Etiquetas comida" />
+      </div>
+      <div class="comida-bloque">
+        <label for="martes_cena">Cena</label>
+        <input type="text" id="martes_cena" placeholder="Cena" />
+        <input type="text" id="etiqueta_martes_cena" placeholder="Etiquetas cena" />
+      </div>
+      <button class="editar">Editar</button>
+    </div>
+    
+    <div class="dia-card">
+      <div class="dia-label">Miercoles</div>
+      <div class="comida-bloque">
+        <label for="miercoles_desayuno">Desayuno</label>
+        <input type="text" id="miercoles_desayuno" placeholder="Desayuno" />
+        <input type="text" id="etiqueta_miercoles_desayuno" placeholder="Etiquetas desayuno" />
+      </div>
+      <div class="comida-bloque">
+        <label for="miercoles_comida">Comida</label>
+        <input type="text" id="miercoles_comida" placeholder="Comida" />
+        <input type="text" id="etiqueta_miercoles_comida" placeholder="Etiquetas comida" />
+      </div>
+      <div class="comida-bloque">
+        <label for="miercoles_cena">Cena</label>
+        <input type="text" id="miercoles_cena" placeholder="Cena" />
+        <input type="text" id="etiqueta_miercoles_cena" placeholder="Etiquetas cena" />
+      </div>
+      <button class="editar">Editar</button>
+    </div>
+    
+    <div class="dia-card">
+      <div class="dia-label">Jueves</div>
+      <div class="comida-bloque">
+        <label for="jueves_desayuno">Desayuno</label>
+        <input type="text" id="jueves_desayuno" placeholder="Desayuno" />
+        <input type="text" id="etiqueta_jueves_desayuno" placeholder="Etiquetas desayuno" />
+      </div>
+      <div class="comida-bloque">
+        <label for="jueves_comida">Comida</label>
+        <input type="text" id="jueves_comida" placeholder="Comida" />
+        <input type="text" id="etiqueta_jueves_comida" placeholder="Etiquetas comida" />
+      </div>
+      <div class="comida-bloque">
+        <label for="jueves_cena">Cena</label>
+        <input type="text" id="jueves_cena" placeholder="Cena" />
+        <input type="text" id="etiqueta_jueves_cena" placeholder="Etiquetas cena" />
+      </div>
+      <button class="editar">Editar</button>
+    </div>
+    
+    <div class="dia-card">
+      <div class="dia-label">Viernes</div>
+      <div class="comida-bloque">
+        <label for="viernes_desayuno">Desayuno</label>
+        <input type="text" id="viernes_desayuno" placeholder="Desayuno" />
+        <input type="text" id="etiqueta_viernes_desayuno" placeholder="Etiquetas desayuno" />
+      </div>
+      <div class="comida-bloque">
+        <label for="viernes_comida">Comida</label>
+        <input type="text" id="viernes_comida" placeholder="Comida" />
+        <input type="text" id="etiqueta_viernes_comida" placeholder="Etiquetas comida" />
+      </div>
+      <div class="comida-bloque">
+        <label for="viernes_cena">Cena</label>
+        <input type="text" id="viernes_cena" placeholder="Cena" />
+        <input type="text" id="etiqueta_viernes_cena" placeholder="Etiquetas cena" />
+      </div>
+      <button class="editar">Editar</button>
+    </div>
+    
+    <div class="dia-card">
+      <div class="dia-label">Sabado</div>
+      <div class="comida-bloque">
+        <label for="sabado_desayuno">Desayuno</label>
+        <input type="text" id="sabado_desayuno" placeholder="Desayuno" />
+        <input type="text" id="etiqueta_sabado_desayuno" placeholder="Etiquetas desayuno" />
+      </div>
+      <div class="comida-bloque">
+        <label for="sabado_comida">Comida</label>
+        <input type="text" id="sabado_comida" placeholder="Comida" />
+        <input type="text" id="etiqueta_sabado_comida" placeholder="Etiquetas comida" />
+      </div>
+      <div class="comida-bloque">
+        <label for="sabado_cena">Cena</label>
+        <input type="text" id="sabado_cena" placeholder="Cena" />
+        <input type="text" id="etiqueta_sabado_cena" placeholder="Etiquetas cena" />
+      </div>
+      <button class="editar">Editar</button>
+    </div>
+    
+    <div class="dia-card">
+      <div class="dia-label">Domingo</div>
+      <div class="comida-bloque">
+        <label for="domingo_desayuno">Desayuno</label>
+        <input type="text" id="domingo_desayuno" placeholder="Desayuno" />
+        <input type="text" id="etiqueta_domingo_desayuno" placeholder="Etiquetas desayuno" />
+      </div>
+      <div class="comida-bloque">
+        <label for="domingo_comida">Comida</label>
+        <input type="text" id="domingo_comida" placeholder="Comida" />
+        <input type="text" id="etiqueta_domingo_comida" placeholder="Etiquetas comida" />
+      </div>
+      <div class="comida-bloque">
+        <label for="domingo_cena">Cena</label>
+        <input type="text" id="domingo_cena" placeholder="Cena" />
+        <input type="text" id="etiqueta_domingo_cena" placeholder="Etiquetas cena" />
+      </div>
+      <button class="editar">Editar</button>
+    </div>
+    
+    <button class="guardar" onclick="guardarMenu()">💾 Guardar menú</button>
+  
+  </section>
+
+  <section id="listaCompra">
+    <h2>🛒 Lista de la compra</h2>
+    <button onclick="vaciarLista()">🗑️ Vaciar lista</button>
+    <ul id="listaCompraItems"></ul>
+  </section>
+
+  <section id="historial">
+    <h2>📚 Historial de menús</h2>
+    <ul id="listaHistorial"></ul>
+  </section>
+
+  <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+  const toggle = document.getElementById('modoLecturaToggle');
+  const inputs = document.querySelectorAll('input[type="text"]');
+  const editarBtns = document.querySelectorAll('button.editar');
+
+  toggle.addEventListener('change', function () {
+    const soloLectura = toggle.checked;
+    inputs.forEach(input => input.disabled = soloLectura);
+    editarBtns.forEach(btn => btn.style.display = soloLectura ? 'none' : 'inline-block');
+  });
+
+  window.guardarMenu = function () {
+    const menu = {
+      "lunes_desayuno": document.getElementById("lunes_desayuno").value || "",
+      "lunes_comida": document.getElementById("lunes_comida").value || "",
+      "lunes_cena": document.getElementById("lunes_cena").value || "",
+      "martes_desayuno": document.getElementById("martes_desayuno").value || "",
+      "martes_comida": document.getElementById("martes_comida").value || "",
+      "martes_cena": document.getElementById("martes_cena").value || "",
+      "miercoles_desayuno": document.getElementById("miercoles_desayuno").value || "",
+      "miercoles_comida": document.getElementById("miercoles_comida").value || "",
+      "miercoles_cena": document.getElementById("miercoles_cena").value || "",
+      "jueves_desayuno": document.getElementById("jueves_desayuno").value || "",
+      "jueves_comida": document.getElementById("jueves_comida").value || "",
+      "jueves_cena": document.getElementById("jueves_cena").value || "",
+      "viernes_desayuno": document.getElementById("viernes_desayuno").value || "",
+      "viernes_comida": document.getElementById("viernes_comida").value || "",
+      "viernes_cena": document.getElementById("viernes_cena").value || "",
+      "sabado_desayuno": document.getElementById("sabado_desayuno").value || "",
+      "sabado_comida": document.getElementById("sabado_comida").value || "",
+      "sabado_cena": document.getElementById("sabado_cena").value || "",
+      "domingo_desayuno": document.getElementById("domingo_desayuno").value || "",
+      "domingo_comida": document.getElementById("domingo_comida").value || "",
+      "domingo_cena": document.getElementById("domingo_cena").value || "",
+    };
+    const etiquetas = {
+      "lunes_desayuno": document.getElementById("etiqueta_lunes_desayuno").value || "",
+      "lunes_comida": document.getElementById("etiqueta_lunes_comida").value || "",
+      "lunes_cena": document.getElementById("etiqueta_lunes_cena").value || "",
+      "martes_desayuno": document.getElementById("etiqueta_martes_desayuno").value || "",
+      "martes_comida": document.getElementById("etiqueta_martes_comida").value || "",
+      "martes_cena": document.getElementById("etiqueta_martes_cena").value || "",
+      "miercoles_desayuno": document.getElementById("etiqueta_miercoles_desayuno").value || "",
+      "miercoles_comida": document.getElementById("etiqueta_miercoles_comida").value || "",
+      "miercoles_cena": document.getElementById("etiqueta_miercoles_cena").value || "",
+      "jueves_desayuno": document.getElementById("etiqueta_jueves_desayuno").value || "",
+      "jueves_comida": document.getElementById("etiqueta_jueves_comida").value || "",
+      "jueves_cena": document.getElementById("etiqueta_jueves_cena").value || "",
+      "viernes_desayuno": document.getElementById("etiqueta_viernes_desayuno").value || "",
+      "viernes_comida": document.getElementById("etiqueta_viernes_comida").value || "",
+      "viernes_cena": document.getElementById("etiqueta_viernes_cena").value || "",
+      "sabado_desayuno": document.getElementById("etiqueta_sabado_desayuno").value || "",
+      "sabado_comida": document.getElementById("etiqueta_sabado_comida").value || "",
+      "sabado_cena": document.getElementById("etiqueta_sabado_cena").value || "",
+      "domingo_desayuno": document.getElementById("etiqueta_domingo_desayuno").value || "",
+      "domingo_comida": document.getElementById("etiqueta_domingo_comida").value || "",
+      "domingo_cena": document.getElementById("etiqueta_domingo_cena").value || "",
+    };
+
+    const fecha = new Date().toLocaleString();
+    const historial = JSON.parse(localStorage.getItem('historialMenus')) || [];
+    historial.push({ fecha, menu, etiquetas });
+    localStorage.setItem('historialMenus', JSON.stringify(historial));
+    actualizarHistorial();
+  };
+
+  function actualizarHistorial() {
+    const lista = document.getElementById('listaHistorial');
+    const historial = JSON.parse(localStorage.getItem('historialMenus')) || [];
+    lista.innerHTML = "";
+
+    historial.forEach((item, index) => {
+      const li = document.createElement('li');
+      let texto = "";
+      Object.entries(item.menu).forEach(([clave, valor]) => {
+        const etiqueta = item.etiquetas[clave] ? ` <em>({item.etiquetas[clave]})</em>` : "";
+        texto += `<strong>{clave}:</strong> {valor}{etiqueta}<br/>`;
+      });
+      li.innerHTML = `<strong>{item.fecha}</strong><br/>{texto}<br/>
+        <button class="restaurar" onclick="restaurarMenu({index})">Restaurar</button>`;
+      lista.appendChild(li);
+    });
+  }
+
+  window.restaurarMenu = function (index) {
+    const historial = JSON.parse(localStorage.getItem('historialMenus')) || [];
+    const menu = historial[index].menu;
+    const etiquetas = historial[index].etiquetas;
+
+    Object.entries(menu).forEach(([clave, valor]) => {
+      const input = document.getElementById(clave);
+      if (input) input.value = valor;
+    });
+    Object.entries(etiquetas).forEach(([clave, valor]) => {
+      const input = document.getElementById("etiqueta_" + clave);
+      if (input) input.value = valor;
+    });
+  };
+
+  actualizarHistorial();
+});
+
+
+function extraerIngredientes(texto) {
+  return texto.split(',').map(i => i.trim().toLowerCase()).filter(Boolean);
+}
+
+function actualizarListaCompra() {
+  const listaUl = document.getElementById('listaCompraItems');
+  const ingredientes = JSON.parse(localStorage.getItem('listaCompra')) || [];
+  listaUl.innerHTML = "";
+  ingredientes.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = item;
+    listaUl.appendChild(li);
+  });
+}
+
+function agregarIngredientesDesdeMenu(menu) {
+  const lista = JSON.parse(localStorage.getItem('listaCompra')) || [];
+  Object.values(menu).forEach(valor => {
+    const nuevos = extraerIngredientes(valor);
+    nuevos.forEach(ing => {
+      if (!lista.includes(ing)) {
+        lista.push(ing);
+      }
+    });
+  });
+  localStorage.setItem('listaCompra', JSON.stringify(lista));
+  actualizarListaCompra();
+}
+
+function vaciarLista() {
+  localStorage.removeItem('listaCompra');
+  actualizarListaCompra();
+}
+
+// Modificar guardarMenu para incluir ingredientes automáticamente
+const oldGuardar = window.guardarMenu;
+window.guardarMenu = function () {
+  oldGuardar();
+  const historial = JSON.parse(localStorage.getItem('historialMenus')) || [];
+  const ultimo = historial[historial.length - 1];
+  agregarIngredientesDesdeMenu(ultimo.menu);
+};
+
+function obtenerAlergiasSeleccionadas() {
+  const checkboxes = document.querySelectorAll('.alergia');
+  return Array.from(checkboxes).filter(c => c.checked).map(c => c.value.toLowerCase());
+}
+
+function verificarAlergias(menu, alergias) {
+  const coincidencias = [];
+  Object.values(menu).forEach(texto => {
+    const ingredientes = extraerIngredientes(texto);
+    ingredientes.forEach(ing => {
+      alergias.forEach(alergia => {
+        if (ing.includes(alergia)) {
+          coincidencias.push(ing);
+        }
+      });
+    });
+  });
+  return [...new Set(coincidencias)];
+}
+
+// Redefinir guardarMenu para añadir chequeo de alergias
+const oldGuardarMenu = window.guardarMenu;
+window.guardarMenu = function () {
+  const alergias = obtenerAlergiasSeleccionadas();
+  const inputs = document.querySelectorAll('input[type="text"]');
+  inputs.forEach(i => i.style.borderColor = "#ccc");
+
+  oldGuardarMenu();
+
+  const historial = JSON.parse(localStorage.getItem('historialMenus')) || [];
+  const ultimo = historial[historial.length - 1];
+  const peligrosos = verificarAlergias(ultimo.menu, alergias);
+
+  if (peligrosos.length > 0) {
+    alert("⚠️ Atención: Se han encontrado ingredientes con tus alergias:
+- " + peligrosos.join("\n"));
+    Object.entries(ultimo.menu).forEach(([clave, valor]) => {
+      peligrosos.forEach(aler => {
+        if (valor.toLowerCase().includes(aler)) {
+          const input = document.getElementById(clave);
+          if (input) input.style.borderColor = "red";
+        }
+      });
+    });
+  }
+};
+
+
+const baseDePlatos = [
+  {
+    "nombre": "Tortilla francesa",
+    "ingredientes": [
+      "huevo",
+      "aceite",
+      "sal"
+    ]
+  },
+  {
+    "nombre": "Ensalada básica",
+    "ingredientes": [
+      "lechuga",
+      "tomate",
+      "aceite",
+      "vinagre"
+    ]
+  },
+  {
+    "nombre": "Arroz con tomate",
+    "ingredientes": [
+      "arroz",
+      "tomate",
+      "aceite"
+    ]
+  },
+  {
+    "nombre": "Pan con tomate",
+    "ingredientes": [
+      "pan",
+      "tomate",
+      "aceite",
+      "sal"
+    ]
+  },
+  {
+    "nombre": "Pasta al ajillo",
+    "ingredientes": [
+      "pasta",
+      "ajo",
+      "aceite"
+    ]
+  }
+];
+
+function buscarSugerencias() {
+  const disponibles = document.getElementById("ingredientesDisponibles").value
+    .toLowerCase()
+    .split(',')
+    .map(i => i.trim())
+    .filter(Boolean);
+
+  const lista = document.getElementById("resultadoSugerencias");
+  lista.innerHTML = "";
+
+  baseDePlatos.forEach(plato => {
+    const tiene = plato.ingredientes.filter(ing =>
+      disponibles.some(d => ing.includes(d) || d.includes(ing))
+    );
+    const faltan = plato.ingredientes.filter(ing =>
+      !tiene.includes(ing)
+    );
+
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <strong>${plato.nombre}</strong><br/>
+      ✅ Tienes: ${tiene.join(", ") || "ninguno"}<br/>
+      ❌ Te faltan: ${faltan.join(", ") || "nada"}<br/>
+      <button onclick="copiarASlot('${plato.nombre}')">Añadir al menú</button>
+    `;
+    lista.appendChild(li);
+  });
+}
+
+function copiarASlot(nombrePlato) {
+  const dia = prompt("¿A qué día quieres añadirlo? (ej: lunes)").toLowerCase();
+  const comida = prompt("¿Desayuno, comida o cena?").toLowerCase();
+  const idCampo = `${dia}_${comida}`;
+  const campo = document.getElementById(idCampo);
+  if (campo) {
+    campo.value = nombrePlato;
+    alert("✅ Plato añadido al menú.");
+  } else {
+    alert("⚠️ No se encontró el campo indicado.");
+  }
+}
+
+</script>
+</body>
+</html>
